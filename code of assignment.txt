@@ -1,0 +1,197 @@
+
+
+CReaTE DATABASE SQL_PROJECT_mini;
+use SQL_PROJECT_mini;
+
+
+task1--------------- write a sql query that for each product return the ammount of money  spent on it. rows should be 
+ordered in descending alphabhatically  orderd by product;
+
+create table shopping_history(
+product varchar(20) not null,
+quantity int not null,
+unit_price int not null
+);
+
+select *from shopping_history;
+
+insert into shopping_history values ('milk' ,3 ,10),
+('bread' ,7 ,3),
+('bread' ,5 ,2);
+
+select product , sum(quantity*unit_price) as total_units from shopping_history 
+group by product;
+
+
+
+---task2-------;
+
+
+-----problemm-1--------;
+drop table phones;
+create table phones(
+name varchar(20)  not null unique,
+phone_number int not null unique
+);
+
+insert into phones values ('jack',1234),
+                          ('lena',3333),
+                          ('mark',9999),
+                          ('anna',7582);
+    
+  select*from phones;
+  
+  
+  create table calls(
+  id int not null unique,
+  caller int  not null,
+  callee int not null,
+  duration int not null);
+  
+  insert into calls values(25,1234,7582,8),
+                          (7,9999,7582,1),
+                          (18,9999,3333,4),
+                          (2,7582,3333,3),
+                          (3,3333,1234,1),
+                          (21,3333,1234,1);
+                          
+
+select*from phones;
+select*from calls;
+
+
+
+---done by using subquaries and inner join;
+
+select z.name 
+from
+(select c.name , sum(c.duration) as total_call_duration
+from
+(select a.name, a.phone_number, b.caller, b.callee, b.duration from phones a
+inner join calls b
+on a.phone_number=b.caller
+or a.phone_number =b.callee) as c
+group by 1
+order by 1)as z
+where total_call_duration = 10 or total_call_duration > 10;
+
+
+
+
+------problem-2
+
+create table phones1(
+name varchar(20)  not null unique,
+phone_number int not null unique
+);
+
+insert into phones1 values ('john' ,6356),
+                          ('addison', 4315),
+                          ('kate',8003),
+                          ('ginny', 9831);
+                          
+ select*from phones1;
+ 
+ create table calls1(
+  id int not null unique,
+  caller int  not null,
+  callee int not null,
+  duration int not null);
+  
+  insert into calls1 values(65,8003,9831,7),
+                          (100,9831,8003,3),
+                          (145,4315,9831,18);
+                          
+   select*from calls1;
+                    
+select z.name 
+from
+(select c.name , sum(c.duration) as total_call_duration
+from
+(select a.name, a.phone_number, b.caller, b.callee, b.duration from phones1 a
+inner join calls1 b
+on a.phone_number=b.caller
+or a.phone_number =b.callee) as c
+group by 1
+order by 1)as z
+where total_call_duration = 10 or total_call_duration > 10;    
+
+
+
+-----task 3-----
+
+---problem 1--
+create table transactions (
+amount int not null,
+date date not null );
+
+insert into transactions values (1000,'2020-01-06'),
+                                (-10,'2020-01-14'),
+                                (-75,'2020-01-20'),
+                                (-5,'2020-01-25'),
+                                (-4,'2020-01-29'),
+                                (2000,'2020-03-10'),
+                                (-75,'2020-03-12'),
+                                (-20,'2020-03-15'),
+                                (40,'2020-03-15'),
+                                (-50,'2020-03-17'),
+                                (200,'2020-10-10'),
+                                (-200,'2020-10-10');
+                                
+select*from transactions;
+
+--credit card holding fee b5rs per month
+--for free credit card holding service- monthly overall transacton more than 100 rs and at least 3 payment
+---march -no fee charged
+--january less than 100 rupees payment payment
+--october only one payment of 200
+--total credit card holding fee  11*5=55
+
+
+select (sum(amount)- 11*5) as balance from transactions;
+
+
+---problem--2 
+create table transactions2 (
+amount int not null,
+date date not null );
+
+insert into transactions2 values (1,'2020-06-29'),
+                                 (35,'2020-02-20'),
+                                 (-50,'2020-02-03'),
+                                 (-1,'2020-02-26'),
+                                 (-200,'2020-08-01'),
+                                 (-44,'2020-02-07'),
+                                 (-5,'2020-02-25'),
+                                 (1,'2020-06-29'),
+                                 (1,'2020-06-29'),
+                                 (-100,'2020-12-29'),
+                                 (-100,'2020-12-30'),
+                                 (-100,'2020-12-31');
+                                 
+---feb credit card total transaction 100
+---dec total transaction 300
+                                 
+                                 
+select (sum(amount)-10*5)as balance from transactions2;
+
+
+---problem--3
+
+
+create table transactions3 (
+amount int not null,
+date date not null );
+
+
+insert into transactions3 values (6000,'2020-04-03'),
+                                 (5000,'2020-04-02'),
+                                 (4000,'2020-04-01'),
+                                 (3000,'2020-03-01'),
+                                 (2000,'2020-02-01'),
+                                 (1000,'2020-01-01');
+                                 
+                                 
+  select*from transactions3;
+  
+  select (sum(amount)-12*5) as balance from transactions3;
